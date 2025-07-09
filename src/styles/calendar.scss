@@ -3,29 +3,44 @@
   width: $calendar-width;
   padding: $calendar-padding;
   flex-wrap: wrap;
-  gap: 1px;
+  gap: $gap-between-days;
 
-  /* $week-days: mon, tue, wed, thu, fri, sat, sun;
+  $week-days: (
+    'mon': 0,
+    'tue': 1,
+    'wed': 2,
+    'thu': 3,
+    'fri': 4,
+    'sat': 5,
+    'sun': 6,
+  );
 
-   @each $start-day in $week-days {
-    &__day--#{$start-day} {
-
+  @each $day, $value in $week-days {
+    &--start-day-#{$day} .calendar__day:first-child {
+      margin-left: calc(($value * $day-size) + ($gap-between-days * $value));
     }
   }
 
-  @for $month-length from 28 through 31 {
-    &__day:nth-child(#{$month-length}) {
-
+  @for $total-days from 28 through 31 {
+    &--month-length-#{$total-days}
+      .calendar__day:nth-child(n + #{$total-days + 1}) {
+      display: none;
     }
-  } */
+  }
+
+  @each $start, $value in $week-days {
+    &--start-day-#{$start} .calendar__day:first-child {
+      margin-left: calc(calc($value * ($gap-between-days + $day-size)));
+    }
+  }
 
   &__day {
     display: flex;
     align-items: center;
     justify-content: center;
 
-    height: 100px;
-    width: 100px;
+    height: $day-size;
+    width: $day-size;
     border: 1px solid black;
     background-color: var(--day-color);
 
@@ -41,5 +56,6 @@
     background-color: $hover-pink;
 
     transform: translate(0, -20px);
+    transition-duration: 500ms;
   }
 }
